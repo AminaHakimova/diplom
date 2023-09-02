@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Главная страница{% endblock %}
+{% load static %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+
+<div class="main-header">
+    <div class="image-container">
+        <img src="{% static 'img/background.jpg' %}" alt="...">
+    </div>
+    <div class="block-logo">
+        <p class="text-logo">Fashion</p>
+    </div>
+    <div class="fashion-text">
+        <div>
+            <p class="text-title slim">Личный &</p>
+        </div>
+        <div>
+            <p class="text-title">Кабинет</p>
+        </div>
+    </div>
+    <div class="text-container">
+        <div class="main-link">
+            <div class="block-link">
+                <a href="{% url 'home' %}"><p>Главная</p></a>
+            </div>
+            {% if  user.is_authenticated %}
+                <div class="block-link">
+                    <a href="{% url 'user' %}"> <p>Личный кабинет</p></a>
+                </div>
+                {% endif %}
+            <div class="block-link">
+                <a href="#info"><p>О нас</p></a>
+            </div>
+            {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}">
+                <div class="block-link">
+                    <p>Вход</p>
+                </div>
+            </a>
+            {% else %}
+            <a href="{% url 'logout' %}">
+                <div class="block-link">
+                    <p>Выход</p>
+                </div>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="second-block">
+    <div class="inner-second-block">
+        <form method="get" action="{% url 'user_filter' %}">
+            <div class="block-with-filter">
+
+                <div class="like-post">
+                    <select name="filter_option" id="" class="select-filter">
+                        <option value="">Все</option>
+                        <option value="DF">Черновик</option>
+                        <option value="PB">Опубликовано</option>
+                    </select>
+                </div>
+
+                <div class="activate-button">
+                    <button type="submit" class="btn-site">Применить</button>
+                </div>
+            </div>
+        </form>
+        <div>
+            <a href="{% url 'user' %}">
+                <p class="clear-filter">Сбросить фильтр</p>
+            </a>
+        </div>
+
+        <div class="grid-container">
+            {% for post in posts %}
+            <a href="{% url 'detail' post.id %}" class="link-detail">
+                <div class="grid-item">
+                    <img src="{{ post.image }}" alt="" class="image-card">
+                    <div class="overlay-text">
+                        {{ post.title }}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

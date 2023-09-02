@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+{% block title %}Главная страница{% endblock %}
+{% load static %}
+
+{% block style %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="main-header">
+        <div class="image-container">
+            <img src="{% static 'img/background.jpg' %}" alt="...">
+        </div>
+        <div class="block-logo">
+            <p class="text-logo">Fashion</p>
+        </div>
+        <div class="fashion-text">
+            <div>
+                <p class="text-title slim">Мода &</p>
+            </div>
+            <div>
+                <p class="text-title">Гармония</p>
+            </div>
+        </div>
+        <div class="text-container">
+            <div class="main-link">
+                <div class="block-link">
+                    <a href="{% url 'home' %}"><p>Главная</p></a>
+                </div>
+                {% if  user.is_authenticated %}
+                    <div class="block-link">
+                        <a href="{% url 'create' %}">
+                            <p>Создание</p>
+                        </a>
+                    </div>
+                    <div class="block-link">
+                        <a href="{% url 'user' %}">
+                            <p>Личный кабинет</p>
+                        </a>
+                    </div>
+                {% endif %}
+                <div class="block-link">
+                    <a href="#info"><p>О нас</p></a>
+                </div>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'login' %}">
+                        <div class="block-link">
+                            <p>Вход</p>
+                        </div>
+                    </a>
+                {% else %}
+                    <a href="{% url 'logout' %}">
+                        <div class="block-link">
+                            <p>Выход</p>
+                        </div>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="second-block">
+        <div class="inner-second-block">
+            <form method="get" action="{% url 'filter' %}">
+                <div class="block-with-filter">
+                    <div class="select-tag">
+                        <select name="tag_option" id="" class="select-filter">
+                            <option value="">Теги</option>
+                            {% for tag in tags %}
+                                <option value="{{ tag.id }}">{{ tag.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="like-post">
+                        <select name="like_option" id="" class="select-filter">
+                            <option value="">Нравится</option>
+                            <option value="more">По возрастанию</option>
+                            <option value="small">По убыванию</option>
+                        </select>
+                    </div>
+
+                    <div class="activate-button">
+                        <button type="submit" class="btn-site">Применить</button>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <a href="{% url 'home' %}">
+                    <p class="clear-filter">Сбросить фильтр</p>
+                </a>
+            </div>
+
+            <div class="grid-container">
+                {% for post in posts %}
+                    <a href="{% url 'detail' post.id %}" class="link-detail">
+                        <div class="grid-item">
+                            <img src="{{ post.image }}" alt="" class="image-card">
+                            <div class="overlay-text">
+                                {{ post.title }}
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+            <div class="info-block">
+                <div class="info-text">
+                    <div>
+                        <article id="info"><h1>О сайте</h1></article>
+                    </div>
+                    <div class="block-info-text">
+                        <p>Это уникальная онлайн-платформа, посвященная миру моды и стиля. У нас вы найдете самые
+                            актуальные тренды, чтобы всегда оставаться в курсе последних модных
+                            событий. Мы предлагаем вдохновение через эксклюзивные фотосессии, обзоры коллекций от
+                            известных дизайнеров.</p>
+                        <p>На нашем сайте вы сможете не только получить информацию о моде, но и воплотить ее в
+                            жизнь. Мы
+                            предоставляем реальные советы по стилю, подборке гардероба и созданию образов для
+                            различных
+                            случаев. Вы также найдете галереи фотографий, идеи для сочетания одежды.</p>
+                    </div>
+                </div>
+                <div class="info-image">
+                    <img src="{% static 'img/info.jpg' %}" alt="..." class="info-img">
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
